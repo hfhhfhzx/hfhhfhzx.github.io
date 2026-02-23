@@ -46,4 +46,4 @@ Hello!
 
 第一篇：[如何将文件/文字推送到 Telegram 频道/群组](blog_1.md)
 
-第二篇：[ZN，LSP_IT，TS 安装包里面的 machikado 是什么？如何生成？]()（WIP）
+第二篇：[ZN，LSPIT，TS 安装包里面的 machikado 是什么？如何生成？](blog_2.md)（WIP）

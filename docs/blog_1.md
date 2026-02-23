@@ -1,3 +1,5 @@
+#### 如何将文字/文件推送到 Telegram
+
 ## 了解需求
 
 为什么我们需要此功能？
@@ -85,80 +87,19 @@ API_ID : `611335`
 
 API_HASH : `d524b414d21f4d37f08684c1df41ac9c`
 
-5.获取 CHAT_ID。访问此链接，里面有（替换你的 BOT_TOKEN 和频道用户名）https://api.telegram.org/bot<你的BOT_TOKEN>/getChat?chat_id=@频道用户名。"id": 后面的就是（频道的 id 一般是负数）
+5.获取 CHAT_ID。访问此链接，里面有（替换你的 BOT_TOKEN 和频道用户名）
 
-6.（可选）打开话题，点击任意消息，选择"复制链接"，链接格式：https://t.me/c/2496139642/5593/397983 5593 就是话题ID
+```
+https://api.telegram.org/bot<你的BOT_TOKEN>/getChat?chat_id=@频道用户名
+```
+
+"id": 后面的就是（频道的 id 一般是负数）
+
+6.（可选）打开话题，点击任意消息，选择"复制链接"，链接格式：https://t.me/c/2496139642/5593/397983 。其中，5593 就是话题ID
 
 7.写 python 脚本
 
-```python
-import asyncio
-import os
-import sys
-from telethon import TelegramClient
-
-API_ID = 611335
-API_HASH = "d524b414d21f4d37f08684c1df41ac9c"
-
-CHAT_ID = os.environ.get("CHAT_ID")
-BOT_TOKEN = os.environ.get("BOT_TOKEN")
-# 如果启用话题功能，添加 MESSAGE_THREAD_ID = os.environ.get("MESSAGE_THREAD_ID")
-MSG_TEMPLATE = """
-114514
-""".strip() # 这里填需要发送的文字
-
-
-def get_caption():
-    msg = MSG_TEMPLATE.format()
-    return msg
-
-
-def check_environ():
-    global CHAT_ID # 如果启用话题功能，这里改为 global CHAT_ID, MESSAGE_THREAD_ID
-    if BOT_TOKEN is None:
-        print("[-] Invalid BOT_TOKEN")
-        exit(1)
-    if CHAT_ID is None:
-        print("[-] Invalid CHAT_ID")
-        exit(1)
-    else:
-        try:
-            CHAT_ID = int(CHAT_ID)
-        except:
-            pass
-
-
-async def main():
-    print("[+] Uploading to telegram")
-    check_environ()
-    files = sys.argv[1:]
-    print("[+] Files:", files)
-    if len(files) <= 0:
-        print("[-] No files to upload")
-        exit(1)
-    print("[+] Logging in Telegram with bot")
-    script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
-    session_dir = os.path.join(script_dir, "bot")
-    
-    async with await TelegramClient(session=session_dir, api_id=API_ID, api_hash=API_HASH).start(bot_token=BOT_TOKEN) as bot:
-        caption_text = get_caption()
-        print("[+] Caption: ")
-        print("---")
-        print(caption_text)
-        print("---")
-        print("[+] Sending")
-        
-        await bot.send_file(entity=CHAT_ID, file=files[0], caption=caption_text, parse_mode="markdown")
-        
-        print("[+] Done!")
-
-if __name__ == "__main__":
-    try:
-        asyncio.run(main())
-    except Exception as e:
-        print(f"[-] An error occurred: {e}")
-
-```
+（太多了放[这里](bot.py)）
 
 其中，BOT_TOKE 和 NCHAT_ID通过环境变量来获取，因为它们是敏感/变化信息，不推荐硬编码
 
@@ -168,7 +109,11 @@ BOT_SESSION 在这由程序读取，同样需要通过环境变量来获取
 session_dir = os.path.join(script_dir, "bot")
 ```
 
-8.配置 github secrets。此功能用于保存一些敏感信息，避免泄露。打开你的 github 仓库，点击 Settings，再点 Secrets and variables，然后点 Actions，继续点 Repository secrets 右边的 New repository secret，填名字和内容，需要的 Secrets 是 BOT_TOKEN，BOT_SESSION，CHAT_ID。如果启用话题功能，还需添加 MESSAGE_THREAD_ID
+8.配置 github secrets。此功能用于保存一些敏感信息，避免泄露。
+
+打开你的 github 仓库，点击 Settings，再点 Secrets and variables，然后点 Actions，继续点 Repository secrets 右边的 New repository secret，填名字和内容。
+
+需要的 Secrets 是 BOT_TOKEN，BOT_SESSION，CHAT_ID。如果启用话题功能，还需添加 MESSAGE_THREAD_ID
 
 9.配置 github actions
 
@@ -180,6 +125,11 @@ session_dir = os.path.join(script_dir, "bot")
           BOT_SESSION: ${{ secrets.BOT_SESSION }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
           # 如果启用话题功能，这里添加 MESSAGE_THREAD_ID:  ${{ secrets.MESSAGE_THREAD_ID }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }} # 此次 commit 的信息
+          COMMIT_URL: ${{ github.event.head_commit.url }} # commit 的链接
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} # workflow 的链接
+          COMMIT_AUTHOR: ${{ github.event.head_commit.author.name }} # commit 的作者
+          BRANCH: ${{ github.ref_name }} # commit 所属的分支
         run: |
             if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then # 只有当 BOT_TOKEN 在 Secrets 中配置了才运行（对分支不需要此功能的友好）
               pip3 install telethon

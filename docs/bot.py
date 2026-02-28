@@ -15,18 +15,18 @@ RUN_URL = os.environ.get("RUN_URL")
 COMMIT_AUTHOR = os.environ.get("COMMIT_AUTHOR")
 BRANCH = os.environ.get("BRANCH")
 MSG_TEMPLATE = """
-New push to github! # 这里填需要发送的文字
+New push to github!
 Branch: **{branch}**
 Changelog: 
 ```
 {commit_message}
 
 ```
-[Commit({short_sha})]({commit_url})
+[Commit]({commit_url})
 [Workflow run]({run_url})
 
 by **{commit_author}**
-""".strip()
+""".strip() # 上面填需要发送的内容
 
 
 def get_caption():
@@ -39,11 +39,11 @@ def get_caption():
     )
     if len(msg) > 1024:
         return COMMIT_URL
-    return msg
+    return msg # 如果发送的内容太多了那么将内容设为commit的URL
 
 
 def check_environ():
-    global CHAT_ID # 如果启用话题功能，这里改为 global CHAT_ID, MESSAGE_THREAD_ID
+    global CHAT_ID # 如果启用话题功能，这里加上 MESSAGE_THREAD_ID
     if BOT_TOKEN is None:
         print("[-] Invalid BOT_TOKEN")
         exit(1)
@@ -60,7 +60,7 @@ def check_environ():
 async def main():
     print("[+] Uploading to telegram")
     check_environ()
-    files = sys.argv[1:]
+    files = sys.argv[1:] # 获取需要上传的文件（你传递的第二个及后面的参数）
     print("[+] Files:", files)
     if len(files) <= 0:
         print("[-] No files to upload")
@@ -77,7 +77,11 @@ async def main():
         print("---")
         print("[+] Sending")
         
-        await bot.send_file(entity=CHAT_ID, file=files[0], caption=caption_text, parse_mode="markdown")
+        await bot.send_file(entity=CHAT_ID, file=files[0], caption=caption_text, parse_mode="markdown") # 如果启用话题功能，添加 reply_to=MESSAGE_THREAD_ID
+        # 发送配置
+        # file=files[0] 意味着只上传一个文件，要打破此限制，请将 [0] 去掉
+        # caption 指要发送的内容
+        # parse_mode="markdown" 指内容的形式为 markdown
         
         print("[+] Done!")
 

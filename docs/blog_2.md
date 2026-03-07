@@ -1,4 +1,6 @@
-#### ZN，LSPIT，TS 安装包里面的 machikado 是什么？如何生成？
+# ZN，LSPIT，TS 安装包里面的 machikado 是什么？如何生成？
+
+最后更新：2026.03.07
 
 当我们查看 ZygiskNext, LSPosed IT, TrickyStore 的安装包时，我们会发现有几个格格不入的存在，它们就是 machikado，格式是 machikado.架构
 
@@ -55,4 +57,20 @@
 
 ## 如何生成
 
-**WIP**
+很简单，按 ZN 源码里提供的方法做即可，其他语言也可以，让ai写就行~~(绝对不是我懒得写)~~
+
+<details>
+  <summary>主要说一下怎么生成 `public_key` 和 `private_key`</summary>
+
+这俩的大小都是32字节，是从一个ssh密钥对中提取的
+
+1.生成ssh密钥（如果你没有）（使用邮箱作为标签，需要安装 `openssh`）
+
+```shell
+ssh-keygen -t ed25519 -C "email@example.com"
+```
+
+2.从密钥中提取
+
+执行[这个 python 脚本](extract.py)（ai写的），就可以了
+</details>

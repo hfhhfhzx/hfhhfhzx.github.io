@@ -1,4 +1,6 @@
-#### 如何将文字/文件推送到 Telegram
+# 如何将文字/文件推送到 Telegram
+
+最后更新：2026.03.07
 
 ## 了解需求
 
@@ -13,6 +15,8 @@
 ## 原理
 
 现在主流的方式就是使用一个 python 脚本（需要 telethon 库），它可以与 Telegram 频道中的 bot 通信，让脚本以 bot 的身份发布信息
+
+也有使用 rust 实现的，不过我不懂 rust，我给个[例子](https://github.com/Hybrid-Mount/meta-hybrid_mount/blob/master/tools/notify/src/main.rs)，感兴趣的可以参考一下
 
 每当我们推送代码到 github，github 就会运行一个 workflow（前提是你配置了 workflow）中。在这个 workflow 中，我们可以设置一个步骤，让它执行推送脚本，等执行完成，频道中就会出现信息啦
 
@@ -33,6 +37,8 @@
 - `MESSAGE_THREAD_ID`（可选）如果你的群组启用了话题功能，那还需要指定话题 ID
 
 1.创建 Telegram 频道/群组。打开 Telegram 客户端，点击右上角的三条横杠，再点击 Contacts，继续点击 New Group / New Channel（群组/频道），填信息，然后点右上角的对钩
+
+这是旧UI的办法，我们来说说新UI的。打开主页，可以看到右下角“个人资料”上面有一个“+”，点击它就可以。如何没有，点右上角三个点，可能有
 
 2.创建 Telegram Bot 。与 @BotFather 聊天（这是专门用来创建 Telegram Bot 的机器人），发送 /newbot，然后发送 bot 的名称、用户名。然后 BotFather 就会发给你 BOT_TOKEN 啦。将你的机器人拉进你的频道，然后设置为管理员
 
@@ -111,9 +117,9 @@ session_dir = os.path.join(script_dir, "bot")
 
 8.配置 github secrets。此功能用于保存一些敏感信息，避免泄露。
 
-打开你的 github 仓库，点击 Settings，再点 Secrets and variables，然后点 Actions，继续点 Repository secrets 右边的 New repository secret，填名字和内容。
+打开你的 github 仓库，点击 `Settings`，再点 `Secrets and variables`，然后点 `Actions`，继续点 `Repository secrets` 右边的 `New repository secret`，填名字和内容。
 
-需要的 Secrets 是 BOT_TOKEN，BOT_SESSION，CHAT_ID。如果启用话题功能，还需添加 MESSAGE_THREAD_ID
+需要的 Secrets 是 `BOT_TOKEN`，`BOT_SESSION`，`CHAT_ID`。如果启用话题功能，还需添加 `MESSAGE_THREAD_ID`
 
 9.配置 github actions
 

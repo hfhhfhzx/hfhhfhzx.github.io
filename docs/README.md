@@ -1,5 +1,9 @@
 #### hfhhfhzx 的个人主页
 
+最后更新：**2026.03.07**
+
+源代码：https://github.com/hfhhfhzx/hfhhfhzx.github.io
+
 Hello! 
 
 ## 我是谁？
@@ -47,3 +51,7 @@ Hello!
 第一篇：[如何将文件/文字推送到 Telegram 频道/群组](blog_1.md)
 
 第二篇：[ZN，LSPIT，TS 安装包里面的 machikado 是什么？如何生成？](blog_2.md)
+
+第三篇：[如何为 apk 中的 dex 文件生成中文混淆]（**WIP**）
+
+第四篇：[Github Actions 小技巧]（**WIP**）

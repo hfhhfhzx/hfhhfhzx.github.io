@@ -1,6 +1,6 @@
 # ZN，LSPIT，TS 安装包里面的 machikado 是什么？如何生成？
 
-最后更新：2026.03.07
+最后更新：**2026.03.07**
 
 当我们查看 ZygiskNext, LSPosed IT, TrickyStore 的安装包时，我们会发现有几个格格不入的存在，它们就是 machikado，格式是 machikado.架构
 
